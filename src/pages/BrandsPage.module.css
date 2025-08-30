@@ -1,0 +1,326 @@
+/* BrandsPage.module.css */
+/* Base Styles */
+.brandsPage {
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--text-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('guitar-hero-bg.png') no-repeat center center/cover;
+  color: white;
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroContent h1 {
+  font-size: 3.5rem;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.heroContent p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* Featured Brands Section */
+.featuredBrands {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--background-light);
+}
+
+.featuredBrands h2 {
+  text-align: center;
+  font-size: 2.25rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.brandShowcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.brandCard {
+  background: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.brandCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.brandLogoContainer {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.brandLogo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.brandCard h3 {
+  margin: var(--spacing-sm) 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.brandDescription {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+  flex-grow: 1;
+}
+
+.exploreButton {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  margin-top: auto;
+}
+
+.exploreButton:hover {
+  background-color: #e64a19;
+}
+
+/* All Brands Section */
+.allBrands {
+  padding: var(--spacing-xl) 0;
+  background-color: #f9f9f9;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.sectionHeader h2 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.searchContainer {
+  display: flex;
+  gap: var(--spacing-sm);
+  width: 100%;
+  max-width: 600px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
+
+.filterSelect {
+  padding: 0 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: white;
+  cursor: pointer;
+}
+
+.brandsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.brandItem {
+  background: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: var(--text-color);
+  text-align: center;
+  padding: var(--spacing-md);
+}
+
+.brandItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.brandImageContainer {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.brandImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.brandItem h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Call to Action Section */
+.ctaSection {
+  background: linear-gradient(135deg, #FF7043 0%, #FF5722 100%);
+  color: white;
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.ctaSection h2 {
+  font-size: 2.25rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.ctaSection p {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-lg);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9;
+}
+
+.ctaButton {
+  background: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading and Error States */
+.loading,
+.error {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .brandShowcase {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .brandsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .heroContent h1 {
+    font-size: 2.5rem;
+  }
+  
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .searchContainer {
+    width: 100%;
+  }
+  
+  .brandShowcase {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContent h1 {
+    font-size: 2rem;
+  }
+  
+  .heroContent p,
+  .ctaSection p {
+    font-size: 1rem;
+  }
+  
+  .searchContainer {
+    flex-direction: column;
+  }
+  
+  .filterSelect {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+  
+  .brandsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
 const GET_GUITAR = gql`
-  query ($brandId: ID!, $modelId: ID!) {
+  query GetGuitar($brandId: ID!, $modelId: ID!) {
     findUniqueModel(brandId: $brandId, modelId: $modelId) {
       id
       name
@@ -32,51 +32,61 @@ const GET_GUITAR = gql`
 export default function GuitarDetailsPage() {
   const { brandId, guitarId } = useParams();
   const { loading, error, data } = useQuery(GET_GUITAR, {
-    variables: { brandId, modelId: guitarId }
+    variables: { brandId: parseInt(brandId, 10), modelId: guitarId }
   });
   const [tab, setTab] = useState("specs");
   const [visible, setVisible] = useState(2);
   const { t } = useLanguage();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading guitar details</p>;
+  if (loading) return <div className="container"><p>Loading…</p></div>;
+  if (error) return <div className="container"><p>Error: {error.message}</p></div>;
 
-  const guitar = data.findUniqueModel;
+  const guitar = data?.findUniqueModel;
+  if (!guitar) return <div className="container"><p>No guitar found.</p></div>;
 
   return (
-    <div>
-      <h1>{guitar.name}</h1>
-      <p>{guitar.description}</p>
-      <p><strong>Price:</strong> ${guitar.price}</p>
+    <div className="container">
+      <section className="guitar-hero">
+        <h1>{guitar.name}</h1>
+        <p className="muted">{guitar.description}</p>
+        <p><strong>{t.price}:</strong> ${guitar.price}</p>
+      </section>
 
-      <div style={{ marginBottom: "10px" }}>
-        <button onClick={() => setTab("specs")}>{t.specs}</button>
-        <button onClick={() => setTab("musicians")}>{t.musicians}</button>
+      {/* Tabs */}
+      <div className="tabs">
+        <button className={tab === "specs" ? "tab active" : "tab"} onClick={() => setTab("specs")}>
+          {t.specs}
+        </button>
+        <button className={tab === "musicians" ? "tab active" : "tab"} onClick={() => setTab("musicians")}>
+          {t.musicians}
+        </button>
       </div>
 
       {tab === "specs" && (
-        <ul>
-          {Object.entries(guitar.specs).map(([key, value]) => (
-            <li key={key}>
-              {key}: {value}
-            </li>
+        <ul className="specs-list">
+          {Object.entries(guitar.specs || {}).map(([key, value]) => (
+            <li key={key}><strong>{key}</strong>: {value}</li>
           ))}
         </ul>
       )}
 
       {tab === "musicians" && (
-        <div>
-          {guitar.musicians.slice(0, visible).map((m, idx) => (
-            <div key={idx} style={{ marginBottom: "10px" }}>
+        <div className="musicians-grid">
+          {guitar.musicians?.slice(0, visible).map((m, idx) => (
+            <div key={idx} className="musician-card">
+              <div className="musician-photo" style={{ background: "#fbe9e7" }}>
+                {m.musicianImage && <img src={m.musicianImage} alt={m.name} />}
+              </div>
               <p><strong>{m.name}</strong></p>
-              {m.musicianImage && <img src={m.musicianImage} alt={m.name} width="120" />}
               {m.bands?.length > 0 && (
-                <p>Bands: {m.bands.join(", ")}</p>
+                <p className="muted">{t.bands}: {m.bands.join(", ")}</p>
               )}
             </div>
           ))}
-          {visible < guitar.musicians.length && (
-            <button onClick={() => setVisible(visible + 2)}>{t.showMore}</button>
+          {visible < (guitar.musicians?.length || 0) && (
+            <button className="btn" onClick={() => setVisible(visible + 2)}>
+              {t.showMore}
+            </button>
           )}
         </div>
       )}

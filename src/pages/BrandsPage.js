@@ -1,8 +1,9 @@
-import { useQuery, gql } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
-import { useLanguage } from "../context/LanguageContext";
+import React, { useState, useEffect } from 'react';
+import { useQuery, gql } from '@apollo/client';
+import { Link } from 'react-router-dom';
+import styles from './BrandsPage.module.css';
 
-const GET_BRANDS = gql`
+const BRANDS_QUERY = gql`
   query {
     findAllBrands {
       id
@@ -12,45 +13,139 @@ const GET_BRANDS = gql`
   }
 `;
 
-export default function BrandsPage() {
-  const { loading, error, data } = useQuery(GET_BRANDS);
-  const navigate = useNavigate();
-  const { t } = useLanguage();
+const BrandsPage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredBrands, setFilteredBrands] = useState([]);
+  const [featuredBrands, setFeaturedBrands] = useState([]);
 
-  if (loading) return <div className="container"><p className="muted">Loading…</p></div>;
-  if (error) return <div className="container"><p className="muted">Error loading brands</p></div>;
+  const { loading, error, data } = useQuery(BRANDS_QUERY);
+
+  useEffect(() => {
+    if (data?.findAllBrands) {
+      const featured = [...data.findAllBrands].slice(0, 4);
+      setFeaturedBrands(featured);
+      setFilteredBrands(data.findAllBrands);
+    }
+  }, [data]);
+
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (data?.findAllBrands) {
+      const filtered = data.findAllBrands.filter(brand =>
+        brand.name.toLowerCase().includes(term)
+      );
+      setFilteredBrands(filtered);
+    }
+  };
+
+  if (loading) return <div className={styles.loading}>Loading brands...</div>;
+  if (error) return <div className={styles.error}>Error loading brands: {error.message}</div>;
 
   return (
-    <div className="container">
-      {/* Hero */}
-      <section className="hero">
-        <div>
+    <div className={styles.brandsPage}>
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
           <h1>
-            {t.heroTitleA} <span className="accent">{t.heroTitleB}</span> {t.heroTitleC}
+            Find Your Perfect <span className={styles.highlight}>Guitar</span>
           </h1>
-          <p className="muted">{t.heroSubtitle}</p>
+          <p>Explore our collection of premium guitar brands</p>
         </div>
-        <div className="hero-visual" aria-hidden />
       </section>
 
-      {/* Brands grid */}
-      <h2 className="section-title">{t.featuring}</h2>
-      <p className="section-subtitle">{t.pickBrand}</p>
+      {/* Featured Brands Showcase */}
+      <section className={styles.featuredBrands}>
+        <div className={styles.container}>
+          <h2>
+            Featured <span className={styles.highlight}>Brands</span>
+          </h2>
+          <div className={styles.brandShowcase}>
+            {featuredBrands.map((brand) => (
+              <div key={brand.id} className={styles.brandCard}>
+                <div className={styles.brandLogoContainer}>
+                  <img
+                    src={brand.image}
+                    alt={brand.name}
+                    className={styles.brandLogo}
+                  />
+                </div>
+                <h3>{brand.name}</h3>
+                <Link
+                  to={`/brand/${brand.id}`}
+                  className={styles.exploreButton}
+                >
+                  Explore {brand.name}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <div className="brands-grid">
-        {data.findAllBrands.map((b) => (
-          <button
-            key={b.id}
-            className="brand-card"
-            onClick={() => navigate(`/brand/${b.id}`)}
-            aria-label={`Open ${b.name}`}
-          >
-            {b.image
-              ? <img src={b.image} alt={`${b.name} logo`} loading="lazy" />
-              : <span className="sr-only">{b.name}</span>}
-          </button>
-        ))}
-      </div>
+      {/* All Brands Section */}
+      <section className={styles.allBrands}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <h2>
+              All <span className={styles.highlight}>Brands</span>
+            </h2>
+            <div className={styles.searchContainer}>
+              <input
+                type="text"
+                placeholder="Search brands..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className={styles.searchInput}
+              />
+              <select className={styles.filterSelect}>
+                <option value="all">All Types</option>
+                <option value="electric">Electric</option>
+                <option value="acoustic">Acoustic</option>
+                <option value="bass">Bass</option>
+                <option value="classical">Classical</option>
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.brandsGrid}>
+            {filteredBrands.length > 0 ? (
+              filteredBrands.map((brand) => (
+                <Link
+                  to={`/brand/${brand.id}`}
+                  key={brand.id}
+                  className={styles.brandItem}
+                >
+                  <div className={styles.brandImageContainer}>
+                    <img
+                      src={brand.image}
+                      alt={brand.name}
+                      className={styles.brandImage}
+                    />
+                  </div>
+                  <h3>{brand.name}</h3>
+                </Link>
+              ))
+            ) : (
+              <div className={styles.noResults}>
+                No brands found matching your search.
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className={styles.ctaSection}>
+        <div className={styles.container}>
+          <h2>Ready to Find Your Perfect Guitar?</h2>
+          <p>Browse our full collection of premium guitars and accessories</p>
+          <button className={styles.ctaButton}>Shop Now</button>
+        </div>
+      </section>
     </div>
   );
-}
+};
+
+export default BrandsPage;
